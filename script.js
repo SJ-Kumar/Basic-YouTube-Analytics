@@ -34,7 +34,8 @@ document.addEventListener("DOMContentLoaded", () => {
         videoDataElement.innerHTML = "";
 
         const apiKey = 'AIzaSyD0gbH6qSaSGJNhU4TsQH-Xs8genUcuGEc';
-        const channelId = 'UCjKvB7E6YiqV9_UMjBC9BHA';
+        const channelId = 'UCYY7eTARH5Ayk2UyVQSRhmQ';
+        //const channelId = 'UC6Am-_05gR85sDkCwrsOa5A';
 
         const videoDataURL = `https://www.googleapis.com/youtube/v3/search?key=${apiKey}&channelId=${channelId}&order=viewCount&type=video&maxResults=100`;
 
@@ -89,7 +90,8 @@ document.addEventListener("DOMContentLoaded", () => {
     // Function to fetch subscriber count from YouTube Data API
     function fetchSubscriberCount() {
         const apiKey = 'AIzaSyD0gbH6qSaSGJNhU4TsQH-Xs8genUcuGEc';
-        const channelId = 'UCjKvB7E6YiqV9_UMjBC9BHA';
+        const channelId = 'UCYY7eTARH5Ayk2UyVQSRhmQ';
+        //const channelId = 'UC6Am-_05gR85sDkCwrsOa5A';
 
         const subscriberCountURL = `https://www.googleapis.com/youtube/v3/channels?key=${apiKey}&id=${channelId}&part=statistics`;
 
@@ -102,6 +104,37 @@ document.addEventListener("DOMContentLoaded", () => {
                 console.error('Error fetching subscriber count:', error);
             });
     }
+    function downloadAsExcel() {
+        const videoData = [];
+
+        // Extract data from the table and store it in the videoData array
+        const tableRows = videoDataElement.querySelectorAll("tr");
+        tableRows.forEach(row => {
+            const columns = row.querySelectorAll("td");
+            if (columns.length === 6) {
+                const rowData = [
+                    columns[0].textContent,
+                    columns[1].textContent,
+                    columns[2].textContent,
+                    columns[3].textContent,
+                    columns[4].textContent,
+                    columns[5].textContent
+                ];
+                videoData.push(rowData);
+            }
+        });
+
+        // Create a new Excel workbook
+        const workbook = XLSX.utils.book_new();
+        const worksheet = XLSX.utils.aoa_to_sheet([['Title', 'Published At', 'Views', 'Likes', 'Avg View Duration', 'Comments'], ...videoData]);
+        XLSX.utils.book_append_sheet(workbook, worksheet, 'Video Data');
+
+        // Save the Excel file
+        XLSX.writeFile(workbook, 'video_data.xlsx');
+    }
+
+    // Add click event listener to the "Download as Excel" button
+    document.getElementById("downloadExcel").addEventListener("click", downloadAsExcel);
 
     // Fetch data when the page loads
     fetchVideoData();

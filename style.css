@@ -32,7 +32,13 @@ h1 {
     animation: spin 2s linear infinite;
 }
 
+.download-button button {
+    background-color: #28a745; /* Green color */
+    color: white;
+}
+
 @keyframes spin {
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
 }
+
